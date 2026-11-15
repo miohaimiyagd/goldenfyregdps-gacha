@@ -1,8 +1,8 @@
 // ===== EDIT THIS FILE to change text, links, cards and drop rates =====
-const CARDS_PER_PACK = 1
-const PACK_MINUTES = 10
-const MAX_PACKS = 3,
-const START_PACKS = 2
+const CARDS_PER_PACK = 1;
+const PACK_MINUTES = 10;
+const MAX_PACKS = 3;
+const START_PACKS = 2;
 
 const SITE = {
   title: "Goldenfyre GDPS Gacha",

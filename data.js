@@ -1,6 +1,10 @@
 // ===== EDIT THIS FILE to change text, links, cards and drop rates =====
 
 const SITE = {
+  CARDS_PER_PACK = 1
+  PACK_MINUTES = 10
+  MAX_PACKS = 3,
+  START_PACKS = 2
   title: "Goldenfyre GDPS Gacha",
   version: "v1.5",
   tagline: "Pull the demons of Goldenfyre.",

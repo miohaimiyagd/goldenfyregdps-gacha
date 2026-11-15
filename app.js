@@ -13,7 +13,7 @@ CARDS.forEach((c, i) => { c.rank = i + 1; c.special = !!c.rarity; c.rar = RARITI
 const lab = c => (c.special ? "" : "#" + c.rank + " ") + c.rar.name;
 
 const art = c => c.image ? `<img src="${c.image}" alt="">` : `<div class="ph">Image<br>placeholder</div>`;
-const tile = (c, n) => `<button class="card" data-r="${c.rank}" style="--rc:${c.rar.color}">${art(c)}<span class="rk">${lab(c)}</span><b>${c.name}</b><small>${c.creator}</small>${n > 1 ? `<i>x${n}</i>` : ""}</button>`;
+const tile = (c, n) => `<button class="card" data-r="${c.rank}" style="--rc:${c.rar.color}">${art(c)}<span class="rk">${lab(c)}</span><b>${c.name}</b><small>${c.publisher || ""}</small>${n > 1 ? `<i>x${n}</i>` : ""}</button>`;
 const total = RARITIES.reduce((a, r) => a + r.weight, 0);
 const odds = w => { const p = w / total * 100; return p >= 1 ? p.toFixed(0) + "%" : p >= 0.01 ? p.toFixed(2).replace(/0+$/, "").replace(/\.$/, "") + "%" : "1 in " + Math.round(total / w).toLocaleString(); };
 const rates = `<table><tr><th>Rarity</th><th>Drop rate</th></tr>${RARITIES.map(r => `<tr><td style="color:${r.color}">${r.name}</td><td>${odds(r.weight)}</td></tr>`).join("")}</table>`;
@@ -65,7 +65,7 @@ function openPack() {
   document.querySelectorAll(".flip").forEach((f, i) => setTimeout(() => f.classList.add("up"), 300 + i * 250));
 }
 function openCard(c) {
-  $("#m").innerHTML = `<div class="mi" style="--rc:${c.rar.color}"><button class="x" data-x aria-label="Close">&times;</button><div class="mart">${art(c)}</div><div><h2>${c.name}</h2><p class="mute">${c.special ? "" : "Rank " + c.rank + ", "}${c.rar.name}${c.creator ? ", by " + c.creator : ""}</p><p>${c.description}</p></div><div class="vid">${c.video ? `<iframe src="${c.video}" title="Verification video" allowfullscreen loading="lazy"></iframe>` : `<div class="ph">Verification video placeholder</div>`}</div></div>`;
+  $("#m").innerHTML = `<div class="mi" style="--rc:${c.rar.color}"><button class="x" data-x aria-label="Close">&times;</button><div class="mart">${art(c)}</div><div><h2>${c.name}</h2><p class="mute">${c.special ? "" : "Rank " + c.rank + ", "}${c.rar.name}${c.publisher ? "<br>Published by " + c.publisher : ""}${c.verifier ? "<br>Verified by " + c.verifier : ""}</p><p>${c.description}</p></div><div class="vid">${c.video ? `<iframe src="${c.video}" title="Verification video" allowfullscreen loading="lazy"></iframe>` : `<div class="ph">Verification video placeholder</div>`}</div></div>`;
   $("#m").showModal();
 }
 function route() {

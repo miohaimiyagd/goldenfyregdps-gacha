@@ -9,10 +9,11 @@ if (typeof S.packs !== "number") { S.packs = C.startPacks; S.last = Date.now(); 
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
 const $ = s => document.querySelector(s);
 
-CARDS.forEach((c, i) => { c.rank = i + 1; c.rar = RARITIES.find(r => c.rank <= r.maxRank) || RARITIES[RARITIES.length - 1]; });
+CARDS.forEach((c, i) => { c.rank = i + 1; c.special = !!c.rarity; c.rar = RARITIES.find(r => r.name === c.rarity) || RARITIES.find(r => c.rank <= r.maxRank) || RARITIES[RARITIES.length - 1]; });
+const lab = c => (c.special ? "" : "#" + c.rank + " ") + c.rar.name;
 
 const art = c => c.image ? `<img src="${c.image}" alt="">` : `<div class="ph">Image<br>placeholder</div>`;
-const tile = (c, n) => `<button class="card" data-r="${c.rank}" style="--rc:${c.rar.color}">${art(c)}<span class="rk">#${c.rank} ${c.rar.name}</span><b>${c.name}</b><small>${c.creator}</small>${n > 1 ? `<i>x${n}</i>` : ""}</button>`;
+const tile = (c, n) => `<button class="card" data-r="${c.rank}" style="--rc:${c.rar.color}">${art(c)}<span class="rk">${lab(c)}</span><b>${c.name}</b><small>${c.creator}</small>${n > 1 ? `<i>x${n}</i>` : ""}</button>`;
 const total = RARITIES.reduce((a, r) => a + r.weight, 0);
 const odds = w => { const p = w / total * 100; return p >= 1 ? p.toFixed(0) + "%" : p >= 0.01 ? p.toFixed(2).replace(/0+$/, "").replace(/\.$/, "") + "%" : "1 in " + Math.round(total / w).toLocaleString(); };
 const rates = `<table><tr><th>Rarity</th><th>Drop rate</th></tr>${RARITIES.map(r => `<tr><td style="color:${r.color}">${r.name}</td><td>${odds(r.weight)}</td></tr>`).join("")}</table>`;
@@ -21,7 +22,7 @@ const pages = {
   pull: () => `<h1>${SITE.tagline}</h1><p class="mute">${SITE.intro}</p><div class="row"><button class="btn big" id="open"></button></div><div id="res" class="grid"></div>`,
   collection: () => {
     const own = CARDS.filter(c => S.owned[c.rank]).length;
-    return `<h1>Collection</h1><p class="mute">${own} of ${CARDS.length} cards collected. Select a card to see details and its verification video.</p><div class="grid">${CARDS.map(c => S.owned[c.rank] ? tile(c, S.owned[c.rank]) : `<div class="card lock"><div class="ph">?</div><span class="rk">#${c.rank} ${c.rar.name}</span></div>`).join("")}</div>`;
+    return `<h1>Collection</h1><p class="mute">${own} of ${CARDS.length} cards collected. Select a card to see details and its verification video.</p><div class="grid">${CARDS.map(c => S.owned[c.rank] ? tile(c, S.owned[c.rank]) : `<div class="card lock"><div class="ph">?</div><span class="rk">${lab(c)}</span></div>`).join("")}</div>`;
   },
   rules: () => `<h1>Rules</h1><ul>${SITE.rules.map(r => `<li>${r}</li>`).join("")}</ul>${rates}`,
   privacy: () => `<h1>Privacy policy</h1><p>${SITE.privacy}</p>`,
@@ -64,7 +65,7 @@ function openPack() {
   document.querySelectorAll(".flip").forEach((f, i) => setTimeout(() => f.classList.add("up"), 300 + i * 250));
 }
 function openCard(c) {
-  $("#m").innerHTML = `<div class="mi" style="--rc:${c.rar.color}"><button class="x" data-x aria-label="Close">&times;</button><div class="mart">${art(c)}</div><div><h2>${c.name}</h2><p class="mute">Rank ${c.rank}, ${c.rar.name}, by ${c.creator}</p><p>${c.description}</p></div><div class="vid">${c.video ? `<iframe src="${c.video}" title="Verification video" allowfullscreen loading="lazy"></iframe>` : `<div class="ph">Verification video placeholder</div>`}</div></div>`;
+  $("#m").innerHTML = `<div class="mi" style="--rc:${c.rar.color}"><button class="x" data-x aria-label="Close">&times;</button><div class="mart">${art(c)}</div><div><h2>${c.name}</h2><p class="mute">${c.special ? "" : "Rank " + c.rank + ", "}${c.rar.name}${c.creator ? ", by " + c.creator : ""}</p><p>${c.description}</p></div><div class="vid">${c.video ? `<iframe src="${c.video}" title="Verification video" allowfullscreen loading="lazy"></iframe>` : `<div class="ph">Verification video placeholder</div>`}</div></div>`;
   $("#m").showModal();
 }
 function route() {

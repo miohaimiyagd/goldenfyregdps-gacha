@@ -21,7 +21,7 @@ const SITE = {
   rules: [
     `You get a free pack of ${CARDS_PER_PACK} cards every ${PACK_MINUTES} minutes.`,
     `Packs stack up while you are away, up to ${MAX_PACKS}. New players start with ${START_PACKS}.`,
-    "Rarity depends on a level's rank on the list. See the drop rates below.",
+    "Rarity depends on a level's rank on the list. Exotic cards are special extras that are not on the list. See the drop rates below.",
     "Duplicates stack and show a count on the card.",
     "Your packs and cards are saved in this browser only. Clearing site data resets them.",
     "Cards have no real-world value and nothing here costs real money."
@@ -32,27 +32,32 @@ const SITE = {
 
 // Rarity is decided by list rank. A card's rank = its position in CARDS below.
 // maxRank = the lowest-ranked card that still counts as this rarity (keep them in increasing order).
-// weight = how likely a pull is this rarity (weights are relative; these add up to 100,000).
+// weight = how likely a pull is this rarity (weights are relative; these add up to 1,000,000).
+// Exotic is special: maxRank 0 means no ranked card gets it. Only cards with rarity: "Exotic" do.
 const RARITIES = [
-  { name: "MYTHICAL",  maxRank: 1,        weight: 1,     color: "#ff5fa8" },
-  { name: "Legendary", maxRank: 10,       weight: 500,   color: "#ff9a1f" },
-  { name: "Epic",      maxRank: 20,       weight: 3000,  color: "#9b5de5" },
-  { name: "Rare",      maxRank: 30,       weight: 12000, color: "#3a8dde" },
-  { name: "Uncommon",  maxRank: 55,       weight: 25000, color: "#4cc36b" },
-  { name: "Common",    maxRank: Infinity, weight: 59499, color: "#a8998a" }
+  { name: "Exotic",       maxRank: 0,        weight: 1,      color: "#ff3344" },
+  { name: "Transcendent", maxRank: 1,        weight: 2,      color: "#ffe14d" },
+  { name: "MYTHICAL",     maxRank: 5,        weight: 20,     color: "#ff5fa8" },
+  { name: "Legendary",    maxRank: 10,       weight: 5000,   color: "#ff9a1f" },
+  { name: "Epic",         maxRank: 20,       weight: 30000,  color: "#9b5de5" },
+  { name: "Rare",         maxRank: 30,       weight: 120000, color: "#3a8dde" },
+  { name: "Uncommon",     maxRank: 55,       weight: 250000, color: "#4cc36b" },
+  { name: "Common",       maxRank: Infinity, weight: 594977, color: "#a8998a" }
 ];
 
 // Cards in list order (first = rank 1). Rarity is set automatically from the rank.
 // Fill in creator, description, image and video whenever you like. Leave "" to keep the blank or placeholder.
 // image: a file name like "abyss.png" | video: a YouTube embed link like "https://www.youtube.com/embed/VIDEO_ID"
+// Exotic cards go at the very END and have rarity: "Exotic". They are not ranked.
 const CARDS = [
-  // MYTHICAL (rank 1)
+  // Transcendent (rank 1)
   { name: "The Abyss", creator: "", description: "", image: "", video: "" },
-  // Legendary (ranks 2-10)
+  // MYTHICAL (ranks 2-5)
   { name: "Planum Astrale", creator: "", description: "", image: "", video: "" },
   { name: "HAIL TO THE THIEF", creator: "", description: "", image: "", video: "" },
   { name: "Sakupenhouse", creator: "", description: "", image: "", video: "" },
   { name: "Sixx Sevvend", creator: "", description: "", image: "", video: "" },
+  // Legendary (ranks 6-10)
   { name: "Heatwave", creator: "", description: "", image: "", video: "" },
   { name: "No Cure", creator: "", description: "", image: "", video: "" },
   { name: "rare animal", creator: "", description: "", image: "", video: "" },
@@ -141,5 +146,8 @@ const CARDS = [
   { name: "Thumper", creator: "", description: "", image: "", video: "" },
   { name: "Darkness", creator: "", description: "", image: "", video: "" },
   { name: "Radiation Wave", creator: "", description: "", image: "", video: "" },
-  { name: "Runaway", creator: "", description: "", image: "", video: "" }
+  { name: "Runaway", creator: "", description: "", image: "", video: "" },
+  // Exotic (not ranked)
+  { name: "Penguin", creator: "", description: "", image: "", video: "", rarity: "Exotic" },
+  { name: "Polterghast", creator: "", description: "", image: "", video: "", rarity: "Exotic" }
 ];

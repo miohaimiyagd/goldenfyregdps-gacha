@@ -32,18 +32,21 @@ const SITE = {
 
 // Rarity is decided by list rank. A card's rank = its position in CARDS below.
 // maxRank = the lowest-ranked card that still counts as this rarity (keep them in increasing order).
-// weight = how likely a pull is this rarity (weights are relative; these add up to 1,000,000).
+// weight is written as 1 / N, meaning "1 in N" pulls give this rarity (any card of it).
+// Change the N to change the odds. Common is the leftover, so it fills in by itself below.
 // Exotic is special: maxRank 0 means no ranked card gets it. Only cards with rarity: "Exotic" do.
 const RARITIES = [
-  { name: "Exotic",       maxRank: 0,        weight: 1,      color: "#ff3344" },
-  { name: "Transcendent", maxRank: 1,        weight: 2,      color: "#ffe14d" },
-  { name: "MYTHICAL",     maxRank: 5,        weight: 20,     color: "#ff5fa8" },
-  { name: "Legendary",    maxRank: 10,       weight: 5000,   color: "#ff9a1f" },
-  { name: "Epic",         maxRank: 20,       weight: 30000,  color: "#9b5de5" },
-  { name: "Rare",         maxRank: 30,       weight: 120000, color: "#3a8dde" },
-  { name: "Uncommon",     maxRank: 55,       weight: 250000, color: "#4cc36b" },
-  { name: "Common",       maxRank: Infinity, weight: 594977, color: "#a8998a" }
+  { name: "Exotic",       maxRank: 0,        weight: 1 / 1000000, color: "#ff3344" },
+  { name: "Transcendent", maxRank: 1,        weight: 1 / 100000,  color: "#ffe14d" },
+  { name: "MYTHICAL",     maxRank: 5,        weight: 1 / 25500,   color: "#ff5fa8" },
+  { name: "Legendary",    maxRank: 10,       weight: 1 / 3750,    color: "#ff9a1f" },
+  { name: "Epic",         maxRank: 20,       weight: 1 / 33,      color: "#9b5de5" },
+  { name: "Rare",         maxRank: 30,       weight: 1 / 8,       color: "#3a8dde" },
+  { name: "Uncommon",     maxRank: 55,       weight: 1 / 4,       color: "#4cc36b" },
+  { name: "Common",       maxRank: Infinity, weight: 0,           color: "#a8998a" }
 ];
+// Common gets whatever chance is left over (about 1 in 1.7).
+RARITIES[RARITIES.length - 1].weight = Math.max(0.01, 1 - RARITIES.slice(0, -1).reduce((sum, r) => sum + r.weight, 0));
 
 // Cards in list order (first = rank 1). Rarity is set automatically from the rank.
 // Fill in publisher, verifier, description, image and video whenever you like. Leave "" to keep the blank or placeholder.

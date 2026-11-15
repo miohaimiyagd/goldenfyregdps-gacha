@@ -14,7 +14,8 @@ CARDS.forEach((c, i) => { c.rank = i + 1; c.rar = RARITIES.find(r => c.rank <= r
 const art = c => c.image ? `<img src="${c.image}" alt="">` : `<div class="ph">Image<br>placeholder</div>`;
 const tile = (c, n) => `<button class="card" data-r="${c.rank}" style="--rc:${c.rar.color}">${art(c)}<span class="rk">#${c.rank} ${c.rar.name}</span><b>${c.name}</b><small>${c.creator}</small>${n > 1 ? `<i>x${n}</i>` : ""}</button>`;
 const total = RARITIES.reduce((a, r) => a + r.weight, 0);
-const rates = `<table><tr><th>Rarity</th><th>Drop rate</th></tr>${RARITIES.map(r => `<tr><td style="color:${r.color}">${r.name}</td><td>${(r.weight / total * 100).toFixed(0)}%</td></tr>`).join("")}</table>`;
+const odds = w => { const p = w / total * 100; return p >= 1 ? p.toFixed(0) + "%" : p >= 0.01 ? p.toFixed(2).replace(/0+$/, "").replace(/\.$/, "") + "%" : "1 in " + Math.round(total / w).toLocaleString(); };
+const rates = `<table><tr><th>Rarity</th><th>Drop rate</th></tr>${RARITIES.map(r => `<tr><td style="color:${r.color}">${r.name}</td><td>${odds(r.weight)}</td></tr>`).join("")}</table>`;
 
 const pages = {
   pull: () => `<h1>${SITE.tagline}</h1><p class="mute">${SITE.intro}</p><div class="row"><button class="btn big" id="open"></button></div><div id="res" class="grid"></div>`,

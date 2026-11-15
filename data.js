@@ -149,7 +149,7 @@ const CARDS = [
   { name: "Thumper", publisher: "Syne", verifier: "Syne", description: "", image: "", video: "" },
   { name: "Darkness", publisher: "Electrow", verifier: "Nange", description: "", image: "", video: "" },
   { name: "Radiation Wave", publisher: "WIZARD", verifier: "WIZARD", description: "", image: "", video: "" },
-  { name: "Runaway", publisher: "Electrow", verifier: "Nange", description: "", image: "", video: "" },
+  { name: "Runaway", publisher: "Electrow", verifier: "Nange", description: "", image: "", video: "https://youtu.be/N-tuyZM9TXA?si=j6hOKdekZAjwEwQL" },
   // Exotic (not ranked)
   { name: "Penguin", publisher: "Firelia", verifier: "???", description: "", image: "", video: "", rarity: "Exotic" },
   { name: "Polterghast", publisher: "iciicle202", verifier: "???", description: "", image: "", video: "", rarity: "Exotic" }

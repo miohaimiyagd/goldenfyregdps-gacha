@@ -51,7 +51,8 @@ const RARITIES = [
 // Exotic cards go at the very END and have rarity: "Exotic". They are not ranked.
 const CARDS = [
   // Transcendent (rank 1)
-  { name: "The Abyss", publisher: "Gamer862", verifier: "", description: "", image: "", video: "" },
+  { name: "The Abyss", publisher: "Gamer862", verifier: "", description: "The Abyss holds the spot as the hardest level in the Goldenfyre GDPS, pushing players to their absolute limits with some of the most brutal gameplay on the server. Built and verified by Gamer862, the level skips heavy decoration in favor of being mostly a raw layout with just a few subtle effects in the background to set the mood. What really makes it notorious is the very first click, which is a strict 240fps frame-perfect that ends most attempts before they even really begin. Because there is no flashy deco to distract you, all the focus is on pure skill and precision, making it a huge achievement for anyone who actually manages to beat it.
+", image: "", video: "" },
   // MYTHICAL (ranks 2-5)
   { name: "Planum Astrale", publisher: "Ke2", verifier: "", description: "", image: "", video: "" },
   { name: "HAIL TO THE THIEF", publisher: "beeguy", verifier: "", description: "", image: "", video: "" },
@@ -93,7 +94,8 @@ const CARDS = [
   { name: "Caesium Factorial 1", publisher: "JPCPro", verifier: "", description: "", image: "", video: "" },
   { name: "In Its Right Place", publisher: "beeguy", verifier: "", description: "", image: "", video: "" },
   { name: "CUBED", publisher: "JPCPro", verifier: "", description: "", image: "", video: "" },
-  { name: "XENOSCAPE", publisher: "hortus", verifier: "", description: "", image: "", video: "" },
+  { name: "XENOSCAPE", publisher: "hortus", verifier: "", description: "XENOSCAPE has earned its legendary status in the GDPS as a massive, one-of-a-kind demon that completely stands out from the rest of the server's roster. Hosted by the Hortus Discord server, this huge megacollab brought together 11 different creators to build an effect layout that feels way more alive and creative than your average raw layout. Instead of just relying on generic block designs or standard demon tropes, the creators packed it with unique visual tricks and clever gameplay transitions that make every part feel fresh. Between its distinct atmosphere and the sheer amount of teamwork that went into it, XENOSCAPE is easily one of the most memorable and creative levels the community has put together.
+", image: "", video: "" },
   { name: "planetrarrium", publisher: "Luna", verifier: "", description: "", image: "", video: "" },
   { name: "Tormented Sentience", publisher: "Goldenfyre101", verifier: "", description: "", image: "", video: "" },
   { name: "Stroll", publisher: "Nange", verifier: "", description: "", image: "", video: "" },

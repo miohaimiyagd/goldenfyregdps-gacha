@@ -1,7 +1,7 @@
 // ===== EDIT THIS FILE to change text, links, cards and drop rates =====
 
 const CARDS_PER_PACK = 1;  // cards in each pack
-const PACK_MINUTES = 10;   // minutes between free packs
+const PACK_MINUTES = 0.05;   // minutes between free packs
 const MAX_PACKS = 3;      // most packs a player can store while away
 const START_PACKS = 2;     // packs new players start with
 

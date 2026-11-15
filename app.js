@@ -1,6 +1,6 @@
 (() => {
 const KEY = "goldenfyreGacha";
-const C = Object.assign({ cardsPerPack: 5, packMinutes: 10, maxPacks: 10, startPacks: 1 }, SITE);
+const C = Object.assign({ cardsPerPack: 1, packMinutes: 10, maxPacks: 3, startPacks: 2 }, SITE);
 const MS = C.packMinutes * 60000;
 let S; try { S = JSON.parse(localStorage.getItem(KEY)); } catch (e) {}
 S = S || {};

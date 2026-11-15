@@ -8,7 +8,7 @@ const START_PACKS = 2;     // packs new players start with
 const SITE = {
   title: "Goldenfyre GDPS Gacha",
   version: "v1.5",
-  tagline: "Pull the demons of Goldenfyre.",
+  tagline: "Goldenfyre101 GDPS Card Gacha.",
   intro: `Open a free pack of ${CARDS_PER_PACK} cards every ${PACK_MINUTES} minutes and collect the whole list.`,
   discord: "https://discord.gg/hrqhEVANkA",
   submit: "https://forms.gle/gpsMMFevEw5PEoaE9",

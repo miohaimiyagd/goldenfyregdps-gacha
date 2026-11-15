@@ -1,10 +1,13 @@
 (() => {
 const KEY = "goldenfyreGacha";
+const C = Object.assign({ cardsPerPack: 5, packMinutes: 10, maxPacks: 10, startPacks: 1 }, SITE);
+const MS = C.packMinutes * 60000;
 let S; try { S = JSON.parse(localStorage.getItem(KEY)); } catch (e) {}
-S = S || { embers: SITE.startEmbers, owned: {}, daily: 0 };
+S = S || {};
+S.owned = S.owned || {};
+if (typeof S.packs !== "number") { S.packs = C.startPacks; S.last = Date.now(); }
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
 const $ = s => document.querySelector(s);
-const DAY = 864e5;
 
 CARDS.forEach((c, i) => { c.rank = i + 1; c.rar = RARITIES.find(r => c.rank <= r.maxRank) || RARITIES[RARITIES.length - 1]; });
 
@@ -14,9 +17,7 @@ const total = RARITIES.reduce((a, r) => a + r.weight, 0);
 const rates = `<table><tr><th>Rarity</th><th>Drop rate</th></tr>${RARITIES.map(r => `<tr><td style="color:${r.color}">${r.name}</td><td>${(r.weight / total * 100).toFixed(0)}%</td></tr>`).join("")}</table>`;
 
 const pages = {
-  pull: () => `<h1>${SITE.tagline}</h1><p class="mute">${SITE.intro}</p>
-    <div class="row"><button class="btn" data-p="1">Pull x1 (${SITE.pullCost} Embers)</button><button class="btn big" data-p="10">Pull x10 (${SITE.tenPullCost} Embers)</button><button class="btn" id="daily"></button></div>
-    <p id="msg" class="mute" role="status"></p><div id="res" class="grid"></div>`,
+  pull: () => `<h1>${SITE.tagline}</h1><p class="mute">${SITE.intro}</p><div class="row"><button class="btn big" id="open"></button></div><div id="res" class="grid"></div>`,
   collection: () => {
     const own = CARDS.filter(c => S.owned[c.rank]).length;
     return `<h1>Collection</h1><p class="mute">${own} of ${CARDS.length} cards collected. Select a card to see details and its verification video.</p><div class="grid">${CARDS.map(c => S.owned[c.rank] ? tile(c, S.owned[c.rank]) : `<div class="card lock"><div class="ph">?</div><span class="rk">#${c.rank} ${c.rar.name}</span></div>`).join("")}</div>`;
@@ -30,10 +31,21 @@ document.title = SITE.title;
 $("#top").innerHTML = `<a class="brand" href="#/">${SITE.title}<small>${SITE.version}</small></a><nav>${[["pull", "Pull"], ["collection", "Collection"], ["rules", "Rules"]].map(([k, t]) => `<a data-k="${k}" href="#/${k}">${t}</a>`).join("")}<a href="${SITE.discord}" target="_blank" rel="noopener">Discord</a><a href="${SITE.submit}" target="_blank" rel="noopener">Submit level</a><a href="${SITE.demonlist}" target="_blank" rel="noopener">Demonlist</a></nav><span class="embers" id="emb"></span>`;
 $("#foot").innerHTML = `${SITE.disclaimer} <a href="#/privacy">Privacy policy</a> | <a href="#/terms">Terms of use</a> | <a href="#/rules">Rules</a>`;
 
-const upd = () => { $("#emb").textContent = S.embers + " Embers"; };
-const msg = t => { const m = $("#msg"); if (m) m.textContent = t; };
-const ready = () => Date.now() - S.daily > DAY;
-function dailyBtn() { const b = $("#daily"); b.disabled = !ready(); b.textContent = ready() ? `Claim ${SITE.dailyEmbers} daily Embers` : "Daily Embers claimed"; }
+// Packs build up one per interval, up to the max. The timer pauses while the stock is full.
+function accrue() {
+  const now = Date.now();
+  if (S.last > now || S.packs >= C.maxPacks) S.last = now;
+  const n = Math.floor((now - S.last) / MS);
+  if (n > 0) { S.packs = Math.min(C.maxPacks, S.packs + n); S.last = S.packs >= C.maxPacks ? now : S.last + n * MS; save(); }
+}
+const fmt = ms => { const s = Math.max(0, Math.ceil(ms / 1000)); return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0"); };
+function upd() {
+  accrue();
+  const full = S.packs >= C.maxPacks, wait = fmt(S.last + MS - Date.now());
+  $("#emb").textContent = `${S.packs} ${S.packs === 1 ? "pack" : "packs"}${full ? " (full)" : ", next in " + wait}`;
+  const b = $("#open");
+  if (b) { b.disabled = S.packs < 1; b.textContent = S.packs < 1 ? `Next pack in ${wait}` : `Open pack (${C.cardsPerPack} cards)`; }
+}
 
 function pick() {
   let x = Math.random() * total, r = RARITIES[RARITIES.length - 1];
@@ -41,13 +53,12 @@ function pick() {
   let pool = CARDS.filter(c => c.rar === r); if (!pool.length) pool = CARDS;
   return pool[Math.floor(Math.random() * pool.length)];
 }
-function pull(n) {
-  const cost = n === 10 ? SITE.tenPullCost : SITE.pullCost;
-  if (S.embers < cost) return msg(`Not enough Embers. This pull costs ${cost}. Claim your daily Embers or come back later.`);
-  S.embers -= cost;
-  const got = Array.from({ length: n }, pick);
+function openPack() {
+  accrue(); if (S.packs < 1) return;
+  S.packs--;
+  const got = Array.from({ length: C.cardsPerPack }, pick);
   got.forEach(c => S.owned[c.rank] = (S.owned[c.rank] || 0) + 1);
-  save(); upd(); msg("");
+  save(); upd();
   $("#res").innerHTML = got.map(c => `<div class="flip"><div class="in"><div class="face back"></div><div class="face fr">${tile(c, 0)}</div></div></div>`).join("");
   document.querySelectorAll(".flip").forEach((f, i) => setTimeout(() => f.classList.add("up"), 300 + i * 250));
 }
@@ -59,17 +70,17 @@ function route() {
   const p = location.hash.replace(/^#\/?/, "") || "pull", k = pages[p] ? p : "pull";
   $("#app").innerHTML = pages[k]();
   document.querySelectorAll("nav a[data-k]").forEach(a => a.classList.toggle("on", a.dataset.k === k));
-  if (k === "pull") dailyBtn();
+  upd();
   window.scrollTo(0, 0);
 }
 
 document.addEventListener("click", e => {
-  const p = e.target.closest("[data-p]"); if (p) return pull(+p.dataset.p);
-  if (e.target.closest("#daily")) { if (!ready()) return; S.embers += SITE.dailyEmbers; S.daily = Date.now(); save(); upd(); dailyBtn(); return msg(`Claimed ${SITE.dailyEmbers} Embers.`); }
+  if (e.target.closest("#open")) return openPack();
   const c = e.target.closest(".card[data-r]"); if (c) return openCard(CARDS[c.dataset.r - 1]);
   if (e.target.closest("[data-x]") || e.target.id === "m") $("#m").close();
 });
 $("#m").addEventListener("close", () => { $("#m").innerHTML = ""; });
 window.addEventListener("hashchange", route);
-upd(); route();
+route();
+setInterval(upd, 1000);
 })();

@@ -66,7 +66,7 @@ function openPack() {
   document.querySelectorAll(".flip").forEach((f, i) => setTimeout(() => f.classList.add("up"), 300 + i * 250));
 }
 function openCard(c) {
-  $("#m").innerHTML = `<div class="mi" style="--rc:${c.rar.color}"><button class="x" data-x aria-label="Close">&times;</button><div class="mart">${art(c)}</div><div><h2>${c.name}</h2><p class="mute">${c.special ? "" : "Rank " + c.rank + ", "}${c.rar.name}${c.publisher ? "<br>Published by " + c.publisher : ""}${c.verifier ? "<br>Verified by " + c.verifier : ""}</p><p>${c.description}</p></div><div class="vid">${c.video ? `<iframe src="${embed(c.video)}" title="Verification video" allowfullscreen loading="lazy"></iframe>` : `<div class="ph">Verification video placeholder</div>`}</div></div>`;
+  $("#m").innerHTML = `<div class="mi" style="--rc:${c.rar.color}"><button class="x" data-x aria-label="Close">&times;</button><div class="mart">${art(c)}</div><div><h2>${c.name}</h2><p class="mute">${c.special ? "" : "Rank " + c.rank + ", "}${c.rar.name}${c.publisher ? "<br>Published by " + c.publisher : ""}${c.verifier ? "<br>Verified by " + c.verifier : ""}</p><p class="mute" style="margin:10px 0 0">Song</p>${c.song ? `<iframe src="${embed(c.song)}" title="Song" allow="autoplay; encrypted-media" loading="lazy" style="display:block;width:100%;aspect-ratio:16/9;border:0;border-radius:10px;margin-top:6px"></iframe>` : `<div class="ph" style="aspect-ratio:16/9;border-radius:10px;margin-top:6px">Song placeholder</div>`}</div><div class="vid">${c.video ? `<iframe src="${embed(c.video)}" title="Verification video" allowfullscreen loading="lazy"></iframe>` : `<div class="ph">Verification video placeholder</div>`}</div></div>`;
   $("#m").showModal();
 }
 function route() {

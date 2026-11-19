@@ -17,7 +17,7 @@ const SITE = {
   packMinutes: PACK_MINUTES,
   maxPacks: MAX_PACKS,
   startPacks: START_PACKS,
-  disclaimer: "Unofficial fan-made project, not affiliated with RobTop Games or Geometry Dash. Level ranks follow the Goldenfyre GDPS Demonlist.",
+  disclaimer: "Unofficial fan-made project, not affiliated with RobTop Games, Goldenfyre101 or Geometry Dash. Level ranks follow the Goldenfyre GDPS Demonlist. THIS IS LIKE HALF VIBECODED FOR FUN PLS NO BULLY!!",
   rules: [
     `You get a free pack of ${CARDS_PER_PACK} cards every ${PACK_MINUTES} minutes.`,
     `Packs stack up while you are away, up to ${MAX_PACKS}. New players start with ${START_PACKS}.`,
